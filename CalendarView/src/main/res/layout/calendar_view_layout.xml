@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/monthlyLayout"
-        android:visibility="gone"
+
 
         >
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -163,7 +163,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/hourlyLayout"
-
+        android:visibility="gone"
         >
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

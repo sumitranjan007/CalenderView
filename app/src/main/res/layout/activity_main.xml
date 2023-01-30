@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-   <com.athentech.srcalender.SrCalenderView
+   <com.athentech.calendarview.kotlin.CalendarView
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:id="@+id/calenderView"

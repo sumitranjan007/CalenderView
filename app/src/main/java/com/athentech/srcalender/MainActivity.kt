@@ -2,6 +2,7 @@ package com.athentech.srcalender
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.athentech.calendarview.events.EventHandler
 import com.athentech.srcalender.databinding.ActivityMainBinding
 import java.util.*
 
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
          calenderView.updateDuration(20)
          calenderView.updateCalander()
 
-         calenderView.setEventHandler(object:EventHandler{
+         calenderView.setEventHandler(object: EventHandler {
              override fun longPressed(date: Date) {
 
              }
