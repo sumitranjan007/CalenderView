@@ -1,7 +1,6 @@
-package com.athentech.srcalender
+package com.athentech.calendarview.data
 
-import java.util.Date
-import java.util.EventListener
+import java.util.*
 
 data class CalenderData(
     var dateList: Date?=null,
@@ -9,3 +8,4 @@ data class CalenderData(
     var isSelected:Boolean=false,
     var isEnabled:Boolean
 )
+

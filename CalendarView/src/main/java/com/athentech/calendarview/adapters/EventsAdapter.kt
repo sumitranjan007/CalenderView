@@ -1,17 +1,18 @@
-package com.athentech.srcalender
+package com.athentech.calendarview.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.athentech.srcalender.databinding.EventsAdapterItemBinding
+import com.athentech.calendarview.data.EventsData
+import com.athentech.calendarview.databinding.EventsAdapterItemBinding
 
-class EventsAdapter:RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
+class EventsAdapter : RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
     var list= mutableListOf<EventsData>()
     fun updateEventsAdapter(list: List<EventsData>){
         this.list=list.toMutableList()
         notifyDataSetChanged()
     }
-    class EventViewHolder (var binding:EventsAdapterItemBinding):RecyclerView.ViewHolder(binding.root){
+    class EventViewHolder (var binding: EventsAdapterItemBinding): RecyclerView.ViewHolder(binding.root){
 
     }
 
@@ -21,10 +22,10 @@ class EventsAdapter:RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
-     holder.binding.apply {
-         val l=list[position]
-         //eventsTxt.text="${l.time} ${l.eventTitle}"
-     }
+        holder.binding.apply {
+            val l=list[position]
+            //eventsTxt.text="${l.time} ${l.eventTitle}"
+        }
     }
 
     override fun getItemCount(): Int {

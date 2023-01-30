@@ -12,7 +12,9 @@ class MainActivity : AppCompatActivity() {
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.apply {
+         calenderView.updateDuration(20)
          calenderView.updateCalander()
+
          calenderView.setEventHandler(object:EventHandler{
              override fun longPressed(date: Date) {
 

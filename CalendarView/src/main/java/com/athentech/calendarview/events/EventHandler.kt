@@ -1,6 +1,6 @@
-package com.athentech.srcalender
+package com.athentech.calendarview.events
 
-import java.util.Date
+import java.util.*
 
 interface EventHandler {
     fun longPressed(date: Date)

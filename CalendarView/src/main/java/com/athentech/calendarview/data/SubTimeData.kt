@@ -1,4 +1,4 @@
-package com.athentech.srcalender
+package com.athentech.calendarview.data
 
 data class SubTimeData(
     var eventsTime:String,

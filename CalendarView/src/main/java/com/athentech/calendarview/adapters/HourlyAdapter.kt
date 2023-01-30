@@ -1,19 +1,20 @@
-package com.athentech.srcalender
+package com.athentech.calendarview.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.athentech.srcalender.databinding.HourlyAdapterItemBinding
+import com.athentech.calendarview.data.HourlyData
+import com.athentech.calendarview.databinding.HourlyAdapterItemBinding
 
-class HourlyAdapter(var context:Context):RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
+class HourlyAdapter (var context: Context): RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
     var list= mutableListOf<HourlyData>()
     fun updateHourlyAdapter(list: List<HourlyData>){
         this.list=list.toMutableList()
         notifyDataSetChanged()
     }
-    class ViewHolder(var binding:HourlyAdapterItemBinding) :RecyclerView.ViewHolder(binding.root){
+    class ViewHolder(var binding: HourlyAdapterItemBinding) : RecyclerView.ViewHolder(binding.root){
 
     }
 
@@ -24,9 +25,9 @@ class HourlyAdapter(var context:Context):RecyclerView.Adapter<HourlyAdapter.View
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.apply{
-        val t=list[position]
+            val t=list[position]
             mainTimeTxt.text=t.time
-            subTimeSlotRecycler.layoutManager=LinearLayoutManager(context)
+            subTimeSlotRecycler.layoutManager= LinearLayoutManager(context)
             val subAdapter=SubTimeAdapter()
             subTimeSlotRecycler.adapter=subAdapter
             subAdapter.updateSubTimeAdapter(t.subList!!)

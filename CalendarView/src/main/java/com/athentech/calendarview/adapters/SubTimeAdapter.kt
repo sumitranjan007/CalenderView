@@ -1,17 +1,18 @@
-package com.athentech.srcalender
+package com.athentech.calendarview.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.athentech.srcalender.databinding.SubTimeAdapterItemBinding
+import com.athentech.calendarview.data.SubTimeData
+import com.athentech.calendarview.databinding.SubTimeAdapterItemBinding
 
-class SubTimeAdapter:RecyclerView.Adapter<SubTimeAdapter.ViewHolder>() {
+class SubTimeAdapter : RecyclerView.Adapter<SubTimeAdapter.ViewHolder>() {
     var list= mutableListOf<SubTimeData>()
     fun updateSubTimeAdapter(list: List<SubTimeData>){
         this.list=list.toMutableList()
         notifyDataSetChanged()
     }
-    class ViewHolder (var binding:SubTimeAdapterItemBinding):RecyclerView.ViewHolder(binding.root){
+    class ViewHolder (var binding: SubTimeAdapterItemBinding): RecyclerView.ViewHolder(binding.root){
 
     }
 

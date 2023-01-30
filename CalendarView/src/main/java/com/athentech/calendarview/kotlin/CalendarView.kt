@@ -1,47 +1,53 @@
-package com.athentech.srcalender
+package com.athentech.calendarview.kotlin
 
 import android.content.Context
-import android.provider.CalendarContract.Events
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.athentech.srcalender.databinding.CalenderMainViewBinding
+import com.athentech.calendarview.R
+import com.athentech.calendarview.adapters.CalenderAdapter
+import com.athentech.calendarview.adapters.HourlyAdapter
+import com.athentech.calendarview.data.CalenderData
+import com.athentech.calendarview.data.EventsData
+import com.athentech.calendarview.data.HourlyData
+import com.athentech.calendarview.data.SubTimeData
+import com.athentech.calendarview.databinding.CalendarViewLayoutBinding
+import com.athentech.calendarview.events.EventHandler
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
-class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):LinearLayout(context,attributeSet) {
+class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
+    LinearLayout(context,attributeSet) {
     private var dateFormat:String?=null
     private var DATE_FORMAT="MMM yyyy"
-    private var currentDate=Calendar.getInstance()
+    private var currentDate= Calendar.getInstance()
     private var eventHandle:EventHandler?=null
     //How many Days to Show ,default to six weeks,42 days
     private val DAYS_COUNT = 42
-
-    private lateinit var binding:CalenderMainViewBinding
-    private lateinit var calanderAdapter:SrCalenderAdapter
-    private lateinit var howerlyAdapter:HourlyAdapter
+    private var durationGlobal=10
+    private lateinit var binding:CalendarViewLayoutBinding
+    private lateinit var calanderAdapter: CalenderAdapter
+    private lateinit var howerlyAdapter: HourlyAdapter
     init {
-      initUiControls(context,attributeSet)
-    }
-    constructor(context: Context?,attributeSet: AttributeSet?,defStyle:Int):this(context,attributeSet){
         initUiControls(context,attributeSet)
     }
-    private fun initUiControls(context: Context?,attributeSet: AttributeSet?){
-        binding= CalenderMainViewBinding.inflate(LayoutInflater.from(context),this,true)
+    constructor(context: Context?, attributeSet: AttributeSet?, defStyle:Int):this(context,attributeSet){
+        initUiControls(context,attributeSet)
+    }
+    private fun initUiControls(context: Context?, attributeSet: AttributeSet?){
+        binding= CalendarViewLayoutBinding.inflate(LayoutInflater.from(context),this,true)
 
         binding.apply {
-            calenderRecycler.layoutManager=GridLayoutManager(context,7)
-            calanderAdapter= SrCalenderAdapter(context!!)
+            calenderRecycler.layoutManager= GridLayoutManager(context,7)
+            calanderAdapter= CalenderAdapter(context!!)
             calenderRecycler.adapter=calanderAdapter
             //Howerly
-            howerlyRecycler.layoutManager=LinearLayoutManager(context)
+            howerlyRecycler.layoutManager= LinearLayoutManager(context)
             howerlyAdapter= HourlyAdapter(context)
             howerlyRecycler.adapter=howerlyAdapter
             dateFormat(attributeSet)
@@ -50,7 +56,7 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
 
     }
     private fun dateFormat(attributeSet: AttributeSet?){
-        val tArray=context.obtainStyledAttributes(attributeSet,R.styleable.SrCalenderView)
+        val tArray=context.obtainStyledAttributes(attributeSet, R.styleable.SrCalenderView)
         try{
             dateFormat=tArray.getString(R.styleable.SrCalenderView_dateFormat)
             if (dateFormat==null){
@@ -62,10 +68,10 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
     }
     private fun assignClickHandlers(){
         binding.apply {
-             nextBtn.setOnClickListener {
-                 currentDate.add(Calendar.MONTH,1)
-                 updateCalander()
-             }
+            nextBtn.setOnClickListener {
+                currentDate.add(Calendar.MONTH,1)
+                updateCalander()
+            }
             previousBtn.setOnClickListener {
                 currentDate.add(Calendar.MONTH,1)
                 updateCalander()
@@ -79,21 +85,21 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
                 updateCalander()
             }
             calenderBtn.setOnClickListener {
-                hourlyLayout.visibility=View.GONE
-                monthlyLayout.visibility=View.VISIBLE
+                hourlyLayout.visibility= View.GONE
+                monthlyLayout.visibility= View.VISIBLE
             }
             eventsBtn.setOnClickListener {
-                hourlyLayout.visibility=View.VISIBLE
-                monthlyLayout.visibility=View.GONE
+                hourlyLayout.visibility= View.VISIBLE
+                monthlyLayout.visibility= View.GONE
             }
 
         }
     }
-     fun updateCalander(){
-         val events=HashSet<Date>()
-         events.add(Date())
-         updateCalender(events)
-     }
+    fun updateCalander(){
+        val events=HashSet<Date>()
+        events.add(Date())
+        updateCalender(events)
+    }
     fun updateCalender(events:HashSet<Date>?){
         val cells=ArrayList<CalenderData>()
         val events=ArrayList<EventsData>()
@@ -110,16 +116,19 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
         }
         binding.apply {
             calanderAdapter.updateSrcalanderAdapter(cells)
-            val sdf=SimpleDateFormat(dateFormat)
+            val sdf= SimpleDateFormat(dateFormat)
             currentDateTxt.text=sdf.format(currentDate.time)
             monthYearTimelyTxt.text=sdf.format(currentDate.time)
-            val sdf_date=SimpleDateFormat("dd MMM yyyy")
+            val sdf_date= SimpleDateFormat("dd MMM yyyy")
             dateTimelyTxt.text=sdf_date.format(currentDate.time)
             //Howerly
-            updateHowerly(30)
+            updateHowerly(durationGlobal)
         }
     }
-    fun updateHowerly(duration:Int){
+    fun updateDuration(duration:Int){
+        durationGlobal=duration
+    }
+    private fun updateHowerly(duration:Int){
         val timeList=ArrayList<HourlyData>()
         val subTimeSlots=ArrayList<SubTimeData>()
         val subTimeSize=60/duration
@@ -132,7 +141,7 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
             }else{
                 "0${i+1}:00"
             }
-            var sub:SubTimeData?=null
+            var sub: SubTimeData?=null
             for (s in 0 until subTimeSize){
                 subDurationIncre += duration
                 sub= SubTimeData("$time:${subDurationIncre}","")
@@ -148,41 +157,6 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
         this.eventHandle=eventHandler
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
