@@ -23,7 +23,7 @@ class EventsAdapter:RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
      holder.binding.apply {
          val l=list[position]
-         eventsTxt.text="${l.time} ${l.eventTitle}"
+         //eventsTxt.text="${l.time} ${l.eventTitle}"
      }
     }
 

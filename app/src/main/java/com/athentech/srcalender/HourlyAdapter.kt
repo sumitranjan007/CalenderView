@@ -1,11 +1,13 @@
 package com.athentech.srcalender
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.athentech.srcalender.databinding.HourlyAdapterItemBinding
 
-class HourlyAdapter:RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
+class HourlyAdapter(var context:Context):RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
     var list= mutableListOf<HourlyData>()
     fun updateHourlyAdapter(list: List<HourlyData>){
         this.list=list.toMutableList()
@@ -24,6 +26,10 @@ class HourlyAdapter:RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
         holder.binding.apply{
         val t=list[position]
             mainTimeTxt.text=t.time
+            subTimeSlotRecycler.layoutManager=LinearLayoutManager(context)
+            val subAdapter=SubTimeAdapter()
+            subTimeSlotRecycler.adapter=subAdapter
+            subAdapter.updateSubTimeAdapter(t.subList!!)
         }
     }
 

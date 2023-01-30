@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.athentech.srcalender.databinding.CalenderMainViewBinding
 import java.text.SimpleDateFormat
@@ -25,6 +26,7 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
 
     private lateinit var binding:CalenderMainViewBinding
     private lateinit var calanderAdapter:SrCalenderAdapter
+    private lateinit var howerlyAdapter:HourlyAdapter
     init {
       initUiControls(context,attributeSet)
     }
@@ -38,6 +40,10 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
             calenderRecycler.layoutManager=GridLayoutManager(context,7)
             calanderAdapter= SrCalenderAdapter(context!!)
             calenderRecycler.adapter=calanderAdapter
+            //Howerly
+            howerlyRecycler.layoutManager=LinearLayoutManager(context)
+            howerlyAdapter= HourlyAdapter(context)
+            howerlyRecycler.adapter=howerlyAdapter
             dateFormat(attributeSet)
             assignClickHandlers()
         }
@@ -64,6 +70,23 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
                 currentDate.add(Calendar.MONTH,1)
                 updateCalander()
             }
+            nextSchBtn.setOnClickListener {
+                currentDate.add(Calendar.DAY_OF_MONTH,1)
+                updateCalander()
+            }
+            previousSchBtn.setOnClickListener {
+                currentDate.add(Calendar.DAY_OF_MONTH,-1)
+                updateCalander()
+            }
+            calenderBtn.setOnClickListener {
+                hourlyLayout.visibility=View.GONE
+                monthlyLayout.visibility=View.VISIBLE
+            }
+            eventsBtn.setOnClickListener {
+                hourlyLayout.visibility=View.VISIBLE
+                monthlyLayout.visibility=View.GONE
+            }
+
         }
     }
      fun updateCalander(){
@@ -89,9 +112,37 @@ class SrCalenderView constructor(context:Context?, attributeSet: AttributeSet?):
             calanderAdapter.updateSrcalanderAdapter(cells)
             val sdf=SimpleDateFormat(dateFormat)
             currentDateTxt.text=sdf.format(currentDate.time)
+            monthYearTimelyTxt.text=sdf.format(currentDate.time)
+            val sdf_date=SimpleDateFormat("dd MMM yyyy")
+            dateTimelyTxt.text=sdf_date.format(currentDate.time)
             //Howerly
+            updateHowerly(30)
+        }
+    }
+    fun updateHowerly(duration:Int){
+        val timeList=ArrayList<HourlyData>()
+        val subTimeSlots=ArrayList<SubTimeData>()
+        val subTimeSize=60/duration
+
+        for (i in 0..23){
+            subTimeSlots.clear()
+            var subDurationIncre=0
+            val time=if (i.toString().length>1) {
+                "${i+1}:00"
+            }else{
+                "0${i+1}:00"
+            }
+            var sub:SubTimeData?=null
+            for (s in 0 until subTimeSize){
+                subDurationIncre += duration
+                sub= SubTimeData("$time:${subDurationIncre}","")
+                subTimeSlots.add(sub)
+            }
+
+            timeList.add(HourlyData(time,subTimeSlots))
 
         }
+        howerlyAdapter.updateHourlyAdapter(timeList)
     }
     fun setEventHandler(eventHandler: EventHandler){
         this.eventHandle=eventHandler
