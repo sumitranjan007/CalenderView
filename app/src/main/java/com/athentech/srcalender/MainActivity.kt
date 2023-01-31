@@ -3,6 +3,7 @@ package com.athentech.srcalender
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.athentech.calendarview.events.EventHandler
+import com.athentech.calendarview.util.getStringDate
 import com.athentech.srcalender.databinding.ActivityMainBinding
 import java.util.*
 
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
              }
 
              override fun clicked(date: Date) {
-
+              localMessages(getStringDate(date),this@MainActivity)
              }
 
              override fun dayViewClicked() {
