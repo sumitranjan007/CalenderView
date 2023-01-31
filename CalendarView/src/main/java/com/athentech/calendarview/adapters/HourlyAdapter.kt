@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.athentech.calendarview.data.HourlyData
 import com.athentech.calendarview.databinding.HourlyAdapterItemBinding
 
-class HourlyAdapter (var context: Context): RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
+class HourlyAdapter (var context: Context,var listener:HourlyAdapterListener): RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
     var list= mutableListOf<HourlyData>()
     fun updateHourlyAdapter(list: List<HourlyData>){
         this.list=list.toMutableList()
@@ -28,7 +28,12 @@ class HourlyAdapter (var context: Context): RecyclerView.Adapter<HourlyAdapter.V
             val t=list[position]
             mainTimeTxt.text=t.time
             subTimeSlotRecycler.layoutManager= LinearLayoutManager(context)
-            val subAdapter=SubTimeAdapter()
+            val subAdapter=SubTimeAdapter(object:SubTimeAdapter.SubHourlySlotListener{
+                override fun longPressed(eventsTimeSlot: String) {
+                    listener.slotsClicked(eventsTimeSlot)
+                }
+
+            })
             subTimeSlotRecycler.adapter=subAdapter
             subAdapter.updateSubTimeAdapter(t.subList!!)
         }
@@ -36,5 +41,8 @@ class HourlyAdapter (var context: Context): RecyclerView.Adapter<HourlyAdapter.V
 
     override fun getItemCount(): Int {
         return list.size
+    }
+    interface HourlyAdapterListener{
+        fun slotsClicked(slots:String)
     }
 }

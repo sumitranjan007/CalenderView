@@ -16,6 +16,7 @@ import com.athentech.calendarview.data.HourlyData
 import com.athentech.calendarview.data.SubTimeData
 import com.athentech.calendarview.databinding.CalendarViewLayoutBinding
 import com.athentech.calendarview.events.EventHandler
+import com.athentech.calendarview.util.localMessages
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -53,7 +54,12 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             calenderRecycler.adapter=calanderAdapter
             //Howerly
             howerlyRecycler.layoutManager= LinearLayoutManager(context)
-            howerlyAdapter= HourlyAdapter(context)
+            howerlyAdapter= HourlyAdapter(context,object:HourlyAdapter.HourlyAdapterListener{
+                override fun slotsClicked(slots: String) {
+                    localMessages(slots,context)
+                }
+
+            })
             howerlyRecycler.adapter=howerlyAdapter
             dateFormat(attributeSet)
             assignClickHandlers()
@@ -135,11 +141,11 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
     }
     private fun updateHowerly(duration:Int){
         val timeList=ArrayList<HourlyData>()
-        val subTimeSlots=ArrayList<SubTimeData>()
+
         val subTimeSize=60/duration
 
         for (i in 0..23){
-            subTimeSlots.clear()
+            val subTimeSlots=ArrayList<SubTimeData>()
             var subDurationIncre=0
             val time=if (i.toString().length>1) {
                 "${i+1}:00"
@@ -149,7 +155,8 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             var sub: SubTimeData?=null
             for (s in 0 until subTimeSize){
                 subDurationIncre += duration
-                sub= SubTimeData("$time:${subDurationIncre}","")
+                val orgTime=time.split(":")
+                sub= SubTimeData("${orgTime[0]}:${subDurationIncre}","")
                 subTimeSlots.add(sub)
             }
 

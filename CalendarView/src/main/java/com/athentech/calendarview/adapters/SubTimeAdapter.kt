@@ -1,12 +1,14 @@
 package com.athentech.calendarview.adapters
 
 import android.view.LayoutInflater
+import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.athentech.calendarview.data.SubTimeData
 import com.athentech.calendarview.databinding.SubTimeAdapterItemBinding
 
-class SubTimeAdapter : RecyclerView.Adapter<SubTimeAdapter.ViewHolder>() {
+class SubTimeAdapter (var listener:SubHourlySlotListener): RecyclerView.Adapter<SubTimeAdapter.ViewHolder>() {
     var list= mutableListOf<SubTimeData>()
     fun updateSubTimeAdapter(list: List<SubTimeData>){
         this.list=list.toMutableList()
@@ -24,10 +26,20 @@ class SubTimeAdapter : RecyclerView.Adapter<SubTimeAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.apply {
             val l=list[position]
+            holder.itemView.setOnLongClickListener(object:OnLongClickListener{
+                override fun onLongClick(v: View?): Boolean {
+                    listener.longPressed(l.eventsTime)
+                    return false
+                }
+
+            })
         }
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+    interface SubHourlySlotListener{
+        fun longPressed(eventsTimeSlot:String)
     }
 }
