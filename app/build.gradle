@@ -37,8 +37,8 @@ android {
 
 dependencies {
    // implementation 'com.github.sumitranjan007:SrCalenderView:Tag'
-   // implementation project(":CalendarView")
-    implementation 'com.github.sumitranjan007:SrCalenderView:1.0.0'
+    implementation project(":CalendarView")
+   // implementation 'com.github.sumitranjan007:SrCalenderView:1.0.1'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'

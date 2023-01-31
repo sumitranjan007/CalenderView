@@ -44,7 +44,12 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
 
         binding.apply {
             calenderRecycler.layoutManager= GridLayoutManager(context,7)
-            calanderAdapter= CalenderAdapter(context!!)
+            calanderAdapter= CalenderAdapter(context!!,object:CalenderAdapter.CalenderListner{
+                override fun dateClicked(date: Date) {
+                    eventHandle!!.clicked(date)
+                }
+
+            })
             calenderRecycler.adapter=calanderAdapter
             //Howerly
             howerlyRecycler.layoutManager= LinearLayoutManager(context)
@@ -73,7 +78,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
                 updateCalander()
             }
             previousBtn.setOnClickListener {
-                currentDate.add(Calendar.MONTH,1)
+                currentDate.add(Calendar.MONTH,-1)
                 updateCalander()
             }
             nextSchBtn.setOnClickListener {
@@ -110,7 +115,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
         calander.add(Calendar.DAY_OF_MONTH,-monthBegineeningSell)
         while (cells.size<DAYS_COUNT){
             events.clear()
-            events.add(EventsData("SEvent",calander.time,"1:28pm"))
+            //events.add(EventsData("SEvent",calander.time,"1:28pm"))
             cells.add(CalenderData(calander.time,events,false,true))
             calander.add(Calendar.DAY_OF_MONTH,1)
         }
