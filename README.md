@@ -12,6 +12,10 @@ Add it in your root build.gradle at the end of repositories:
 			maven { url 'https://jitpack.io' }
 		}
 	}
+	
 dependencies {
+
 	        implementation 'com.github.sumitranjan007:SrCalenderView:1.0.2'
+		
+		
 	}
