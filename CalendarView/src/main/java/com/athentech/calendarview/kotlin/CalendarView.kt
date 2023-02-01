@@ -34,6 +34,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
     private lateinit var binding:CalendarViewLayoutBinding
     private lateinit var calanderAdapter: CalenderAdapter
     private lateinit var howerlyAdapter: HourlyAdapter
+    private val cells=ArrayList<CalenderData>()
     init {
         initUiControls(context,attributeSet)
     }
@@ -46,7 +47,9 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
         binding.apply {
             calenderRecycler.layoutManager= GridLayoutManager(context,7)
             calanderAdapter= CalenderAdapter(context!!,object:CalenderAdapter.CalenderListner{
-                override fun dateClicked(date: Date) {
+                override fun dateClicked(date: Date,position:Int) {
+                    val sdf=SimpleDateFormat("dd MMM yyyy")
+                    selectedDateTxt.text=sdf.format(date.time)
                     eventHandle!!.clicked(date)
                 }
 
@@ -112,7 +115,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
         updateCalender(events)
     }
     fun updateCalender(events:HashSet<Date>?){
-        val cells=ArrayList<CalenderData>()
+        cells.clear()
         val events=ArrayList<EventsData>()
 
         val calander=currentDate.clone() as Calendar
@@ -132,6 +135,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             monthYearTimelyTxt.text=sdf.format(currentDate.time)
             val sdf_date= SimpleDateFormat("dd MMM yyyy")
             dateTimelyTxt.text=sdf_date.format(currentDate.time)
+
             //Howerly
             updateHowerly(durationGlobal)
         }
@@ -147,16 +151,16 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
         for (i in 0..23){
             val subTimeSlots=ArrayList<SubTimeData>()
             var subDurationIncre=0
-            val time=if (i.toString().length>1) {
-                "${i+1}:00"
-            }else{
+            val time=if (i<9) {
                 "0${i+1}:00"
+            }else{
+                "${i+1}:00"
             }
             var sub: SubTimeData?=null
             for (s in 0 until subTimeSize){
                 subDurationIncre += duration
                 val orgTime=time.split(":")
-                sub= SubTimeData("${orgTime[0]}:${subDurationIncre}","")
+                sub= SubTimeData("${orgTime[0]}:${subHour(subDurationIncre,duration)} to ${orgTime[0]}:${subDurationIncre}","")
                 subTimeSlots.add(sub)
             }
 
@@ -165,8 +169,37 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
         }
         howerlyAdapter.updateHourlyAdapter(timeList)
     }
+    fun subHour(subDurationIncre:Int,duration:Int):String{
+        val dur=(subDurationIncre-duration)
+       return if(dur>0){
+            "${dur}"
+        }else{
+            "00"
+        }
+    }
     fun setEventHandler(eventHandler: EventHandler){
         this.eventHandle=eventHandler
+    }
+    //Calender navigation drawable
+    fun setCalendarPrevDrawable(previousDrawable:Int){
+        binding.apply {
+            previousBtn.setImageResource(previousDrawable)
+            previousSchBtn.setImageResource(previousDrawable)
+        }
+
+    }
+    fun setCalendarNextDrawable(nextDrawable:Int){
+        binding.apply {
+            nextBtn.setImageResource(nextDrawable)
+            nextSchBtn.setImageResource(nextDrawable)
+        }
+
+    }
+    fun setNavBackground(bacDrawable:Int){
+        binding.apply {
+            hourlyNavLay.setBackgroundResource(bacDrawable)
+            calenderNavLay.setBackgroundResource(bacDrawable)
+        }
     }
 }
 

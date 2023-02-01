@@ -52,11 +52,13 @@ class CalenderAdapter (var context: Context,var listener:CalenderListner): Recyc
             todayCalendar.time=today
              if (isGreaterDate(dateL,today) && dayOfMonth!=todayCalendar.get(Calendar.DAY_OF_MONTH)){
                  dateTxt.setTextColor(context.resources.getColor(R.color.greyed_out,null))
+                 mainL.isEnabled=false
              }else if (dayOfMonth==todayCalendar.get(Calendar.DAY_OF_MONTH) && month==todayCalendar.get(Calendar.MONTH) && year==todayCalendar.get(Calendar.YEAR)){
                   dateTxt.setTypeface(null,Typeface.BOLD)
                  dateTxt.setTextColor(context.resources.getColor(R.color.white,null))
                  dateTxt.background=ResourcesCompat.getDrawable(context.resources,R.drawable.shape_selected_date,null)
              }else if (getDayNameOfTheDay(dateL)=="Sun"){
+                 mainL.isEnabled=false
                  dateTxt.setTextColor(context.resources.getColor(R.color.greyed_out,null))
              }
              if (mainL.eventsList!!.size>0){
@@ -65,8 +67,11 @@ class CalenderAdapter (var context: Context,var listener:CalenderListner): Recyc
                  eventsRecycler.visibility= View.GONE
              }
             holder.itemView.setOnClickListener {
+                if (mainL.isEnabled) {
+                    listener.dateClicked(dateL, position)
+                }else{
 
-                listener.dateClicked(dateL)
+                }
             }
         }
     }
@@ -75,7 +80,8 @@ class CalenderAdapter (var context: Context,var listener:CalenderListner): Recyc
         return list.size
     }
     interface CalenderListner{
-        fun dateClicked(date: Date)
+
+        fun dateClicked(date: Date,position: Int)
     }
 
 }

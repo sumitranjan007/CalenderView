@@ -14,9 +14,13 @@ class MainActivity : AppCompatActivity() {
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.apply {
-         calenderView.updateDuration(20)
+         calenderView.updateDuration(10)
          calenderView.updateCalander()
-
+         calenderView.apply {
+             setCalendarNextDrawable(R.drawable.next_icon_ext)
+             setCalendarPrevDrawable(R.drawable.previous_icon_ext)
+             setNavBackground(R.drawable.shape_nav_cal_2)
+         }
          calenderView.setEventHandler(object: EventHandler {
              override fun longPressed(date: Date) {
 
