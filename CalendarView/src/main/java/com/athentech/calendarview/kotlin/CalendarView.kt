@@ -2,6 +2,7 @@ package com.athentech.calendarview.kotlin
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -17,10 +18,10 @@ import com.athentech.calendarview.data.SubTimeData
 import com.athentech.calendarview.databinding.CalendarViewLayoutBinding
 import com.athentech.calendarview.events.EventHandler
 import com.athentech.calendarview.util.localMessages
+import java.text.DateFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
     LinearLayout(context,attributeSet) {
@@ -59,6 +60,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             howerlyRecycler.layoutManager= LinearLayoutManager(context)
             howerlyAdapter= HourlyAdapter(context,object:HourlyAdapter.HourlyAdapterListener{
                 override fun slotsClicked(slots: String) {
+                    extratSlotsTime(slots)
                     localMessages(slots,context)
                 }
 
@@ -164,7 +166,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
                 subTimeSlots.add(sub)
             }
 
-            timeList.add(HourlyData(time,subTimeSlots))
+            timeList.add(HourlyData(convertTo24Hour(time)!!,subTimeSlots))
 
         }
         howerlyAdapter.updateHourlyAdapter(timeList)
@@ -200,6 +202,28 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             hourlyNavLay.setBackgroundResource(bacDrawable)
             calenderNavLay.setBackgroundResource(bacDrawable)
         }
+    }
+    fun extratSlotsTime(slots:String){
+        try {
+            val mainSlots = slots.split("to")
+            val startSlot = mainSlots[0].replace(" ","")
+            val endSlots = mainSlots[1].replace(" ","")
+            eventHandle!!.timeLineLongPressed(convertTo24Hour(startSlot)!!,convertTo24Hour(endSlots)!!)
+            Log.d("calender_view", convertTo24Hour(endSlots)!!)
+        }catch (e:Exception){
+            Log.d("calender_view", e.message!!)
+        }
+    }
+    fun convertTo24Hour(Time: String?): String? {
+        val f1: DateFormat = SimpleDateFormat("HH:mm") //11:00 pm
+        var d: Date? = null
+        try {
+            d = f1.parse(Time)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        val f2: DateFormat = SimpleDateFormat("hh:mm a")
+        return f2.format(d)
     }
 }
 

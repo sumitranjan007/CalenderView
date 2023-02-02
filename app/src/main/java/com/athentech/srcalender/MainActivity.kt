@@ -2,6 +2,7 @@ package com.athentech.srcalender
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.athentech.calendarview.events.EventHandler
 import com.athentech.calendarview.util.getStringDate
 import com.athentech.srcalender.databinding.ActivityMainBinding
@@ -32,6 +33,10 @@ class MainActivity : AppCompatActivity() {
 
              override fun dayViewClicked() {
 
+             }
+
+             override fun timeLineLongPressed(fromTime: String, endTime: String) {
+                  Log.d("calender_view","Start -$fromTime  End time - $endTime")
              }
 
          })
