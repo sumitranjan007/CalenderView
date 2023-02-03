@@ -26,13 +26,15 @@ class SubTimeAdapter (var listener:SubHourlySlotListener): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.apply {
             val l=list[position]
-            holder.itemView.setOnLongClickListener(object:OnLongClickListener{
+            holder.itemView.setOnClickListener {
+                listener.clickedTimeLine(l.eventsTime)
+            }/*.setOnLongClickListener(object:OnLongClickListener{
                 override fun onLongClick(v: View?): Boolean {
-                    listener.longPressed(l.eventsTime)
+                    listener.clickedTimeLine(l.eventsTime)
                     return false
                 }
 
-            })
+            })*/
         }
     }
 
@@ -40,6 +42,6 @@ class SubTimeAdapter (var listener:SubHourlySlotListener): RecyclerView.Adapter<
         return list.size
     }
     interface SubHourlySlotListener{
-        fun longPressed(eventsTimeSlot:String)
+        fun clickedTimeLine(eventsTimeSlot:String)
     }
 }

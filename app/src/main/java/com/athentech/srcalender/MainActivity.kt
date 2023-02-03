@@ -35,9 +35,16 @@ class MainActivity : AppCompatActivity() {
 
              }
 
-             override fun timeLineLongPressed(fromTime: String, endTime: String) {
-                  Log.d("calender_view","Start -$fromTime  End time - $endTime")
+             override fun timePressed(
+                 selectedDate: String,
+                 fromTime: String,
+                 endTime: String,
+                 duration: Int
+             ) {
+                 Log.d("calender_view","Date-$selectedDate Start -$fromTime  End time - $endTime Duration-$duration")
              }
+
+
 
          })
         }

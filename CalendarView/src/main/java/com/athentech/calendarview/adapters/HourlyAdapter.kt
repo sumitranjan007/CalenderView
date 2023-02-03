@@ -29,7 +29,7 @@ class HourlyAdapter (var context: Context,var listener:HourlyAdapterListener): R
             mainTimeTxt.text=t.time
             subTimeSlotRecycler.layoutManager= LinearLayoutManager(context)
             val subAdapter=SubTimeAdapter(object:SubTimeAdapter.SubHourlySlotListener{
-                override fun longPressed(eventsTimeSlot: String) {
+                override fun clickedTimeLine(eventsTimeSlot: String) {
                     listener.slotsClicked(eventsTimeSlot)
                 }
 

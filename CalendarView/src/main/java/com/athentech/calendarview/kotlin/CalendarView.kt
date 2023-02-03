@@ -35,6 +35,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
     private lateinit var binding:CalendarViewLayoutBinding
     private lateinit var calanderAdapter: CalenderAdapter
     private lateinit var howerlyAdapter: HourlyAdapter
+    private var selectedDateTimeLine:String?=null
     private val cells=ArrayList<CalenderData>()
     init {
         initUiControls(context,attributeSet)
@@ -137,7 +138,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             monthYearTimelyTxt.text=sdf.format(currentDate.time)
             val sdf_date= SimpleDateFormat("dd MMM yyyy")
             dateTimelyTxt.text=sdf_date.format(currentDate.time)
-
+            selectedDateTimeLine=sdf_date.format(currentDate.time)
             //Howerly
             updateHowerly(durationGlobal)
         }
@@ -208,7 +209,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             val mainSlots = slots.split("to")
             val startSlot = mainSlots[0].replace(" ","")
             val endSlots = mainSlots[1].replace(" ","")
-            eventHandle!!.timeLineLongPressed(convertTo24Hour(startSlot)!!,convertTo24Hour(endSlots)!!)
+            eventHandle!!.timePressed(selectedDateTimeLine!!,convertTo24Hour(startSlot)!!,convertTo24Hour(endSlots)!!,durationGlobal)
             Log.d("calender_view", convertTo24Hour(endSlots)!!)
         }catch (e:Exception){
             Log.d("calender_view", e.message!!)
