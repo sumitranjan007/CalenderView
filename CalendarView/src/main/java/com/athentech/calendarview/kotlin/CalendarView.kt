@@ -28,11 +28,11 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
     private var dateFormat:String?=null
     private var DATE_FORMAT="MMM yyyy"
     private var currentDate= Calendar.getInstance()
-    private var eventHandle:EventHandler?=null
+    private var eventHandle: EventHandler?=null
     //How many Days to Show ,default to six weeks,42 days
     private val DAYS_COUNT = 42
     private var durationGlobal=10
-    private lateinit var binding:CalendarViewLayoutBinding
+    private lateinit var binding: CalendarViewLayoutBinding
     private lateinit var calanderAdapter: CalenderAdapter
     private lateinit var howerlyAdapter: HourlyAdapter
     private var selectedDateTimeLine:String?=null
@@ -48,18 +48,21 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
 
         binding.apply {
             calenderRecycler.layoutManager= GridLayoutManager(context,7)
-            calanderAdapter= CalenderAdapter(context!!,object:CalenderAdapter.CalenderListner{
+            calanderAdapter= CalenderAdapter(context!!,object: CalenderAdapter.CalenderListner{
                 override fun dateClicked(date: Date,position:Int) {
                     val sdf=SimpleDateFormat("dd MMM yyyy")
                     selectedDateTxt.text=sdf.format(date.time)
+                    currentDate.time = sdf.parse(sdf.format(date.time))!!
                     eventHandle!!.clicked(date)
+                    eventsBtn.performClick()
+                    updateCalander()
                 }
 
             })
             calenderRecycler.adapter=calanderAdapter
             //Howerly
             howerlyRecycler.layoutManager= LinearLayoutManager(context)
-            howerlyAdapter= HourlyAdapter(context,object:HourlyAdapter.HourlyAdapterListener{
+            howerlyAdapter= HourlyAdapter(context,object: HourlyAdapter.HourlyAdapterListener{
                 override fun slotsClicked(slots: String) {
                     extratSlotsTime(slots)
                     localMessages(slots,context)
@@ -139,6 +142,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
             val sdf_date= SimpleDateFormat("dd MMM yyyy")
             dateTimelyTxt.text=sdf_date.format(currentDate.time)
             selectedDateTimeLine=sdf_date.format(currentDate.time)
+            selectedDateTxt.text=sdf_date.format(currentDate.time)
             //Howerly
             updateHowerly(durationGlobal)
         }
@@ -174,7 +178,7 @@ class CalendarView constructor(context: Context?, attributeSet: AttributeSet?):
     }
     fun subHour(subDurationIncre:Int,duration:Int):String{
         val dur=(subDurationIncre-duration)
-       return if(dur>0){
+        return if(dur>0){
             "${dur}"
         }else{
             "00"
